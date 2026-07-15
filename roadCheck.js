@@ -1,68 +1,88 @@
-async function checkRoadRestrictions(points) {
-
-    let warnings = [];
-
-    // prendiamo alcuni punti del percorso
-    let samplePoints = points.filter((p, index) => index % 20 === 0);
+async function checkRoadRestrictions(points){
 
 
-    for (let p of samplePoints) {
-
-        let lat = p[0];
-        let lon = p[1];
+let warnings=[];
 
 
-        let query = `
-        [out:json];
-        way(around:30,${lat},${lon})
-        ["highway"];
-        out tags;
-        `;
-
-
-        let url =
-        "https://overpass-api.de/api/interpreter?data="
-        + encodeURIComponent(query);
-
-
-        let response = await fetch(url);
-
-        let data = await response.json();
+let samplePoints =
+points.filter((p,index)=>index%5===0);
 
 
 
-        data.elements.forEach(function(road){
+for(let p of samplePoints){
 
 
-            let type =
-            road.tags.highway;
+let lat=p[0];
+let lon=p[1];
 
 
-            if(
-                type === "motorway" ||
-                type === "motorway_link" ||
-                type === "trunk" ||
-                type === "trunk_link"
-            ){
+let query=`
 
-                warnings.push({
-                    name: road.tags.name || "Strada non identificata",
-                    type:type
-                });
+[out:json];
 
-            }
+way(around:40,${lat},${lon})
+["highway"];
+
+out tags;
+
+`;
 
 
-        });
+
+let url=
+
+"https://overpass-api.de/api/interpreter?data="
++
+encodeURIComponent(query);
 
 
-    }
+
+let response =
+await fetch(url);
 
 
-    return warnings;
+let data =
+await response.json();
+
+
+
+data.elements.forEach(road=>{
+
+
+let type =
+road.tags.highway;
+
+
+
+if(forbiddenRoadTypes.includes(type)){
+
+
+warnings.push({
+
+name:road.tags.name || "Strada non identificata",
+
+type:type
+
+});
+
 
 }
-function calculateScooterScore(warnings, distance){
+
+
+});
+
+
+}
+
+
+return warnings;
+
+
+}
+
+
+
+function calculateScooterScore(warnings,distance){
 
 
 let score=100;
@@ -72,10 +92,13 @@ score -= warnings.length * 20;
 
 
 if(distance>30000){
+
 score-=10;
+
 }
 
 
 return Math.max(score,0);
+
 
 }
