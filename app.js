@@ -104,12 +104,32 @@ let km =
 
 
 
+let warnings = await checkRoadRestrictions(points);
+
+
+if(warnings.length > 0){
+
 document.getElementById("info").innerHTML =
 
-"🟢 Percorso trovato<br>"+
+"⚠️ ATTENZIONE<br><br>"+
+"Questo percorso contiene strade non adatte ai ciclomotori:<br><br>"+
+warnings.map(w =>
+"🚫 "+w.name+" ("+w.type+")"
+).join("<br>");
+
+}
+
+else {
+
+
+document.getElementById("info").innerHTML =
+
+"🟢 Percorso verificato<br><br>"+
 "📏 "+km+" km<br>"+
-"🛵 Modalità: "+
-document.getElementById("vehicle").value;
+"🛵 Percorribile con ciclomotore";
+
+
+}
 
 
 
