@@ -1,4 +1,6 @@
-let map = L.map('map').setView([45.5845,9.2744],13);
+let map = L.map('map')
+.setView([45.5845,9.2744],13);
+
 
 
 L.tileLayer(
@@ -16,45 +18,50 @@ let routeLine;
 
 async function geocode(place){
 
-let url =
+
+let url=
+
 "https://nominatim.openstreetmap.org/search?format=json&q="
-+encodeURIComponent(place);
++
+encodeURIComponent(place);
 
 
-let r = await fetch(url);
 
-let data = await r.json();
+let response =
+await fetch(url);
+
+
+
+let data =
+await response.json();
+
+
+
+if(data.length===0){
+
+throw new Error("Indirizzo non trovato");
+
+}
 
 
 return [
-data[0].lat,
-data[0].lon
+
+parseFloat(data[0].lat),
+
+parseFloat(data[0].lon)
+
 ];
 
 }
 
-function buildRouteURL(a,b,mode){
-
-let profile="driving";
 
 
-if(mode==="50cc"){
-    profile="driving";
-}
-
-
-return `
-https://router.project-osrm.org/route/v1/${profile}/
-${a[1]},${a[0]};
-${b[1]},${b[0]}
-?overview=full&geometries=geojson&alternatives=true
-`
-.replace(/\s/g,'');
-
-}
 
 
 async function calculateRoute(){
+
+
+try{
 
 
 let start =
@@ -66,8 +73,14 @@ document.getElementById("end").value;
 
 
 
+let vehicle =
+document.getElementById("vehicle").value;
+
+
+
 let a =
 await geocode(start);
+
 
 
 let b =
@@ -75,17 +88,15 @@ await geocode(end);
 
 
 
-let vehicle =
-document.getElementById("vehicle").value;
+let url=
 
-
-let url =
-buildRouteURL(a,b,vehicle);
+`https://router.project-osrm.org/route/v1/driving/${a[1]},${a[0]};${b[1]},${b[0]}?overview=full&geometries=geojson&alternatives=true`;
 
 
 
 let response =
 await fetch(url);
+
 
 
 let data =
@@ -95,6 +106,7 @@ await response.json();
 
 let selectedRoute =
 data.routes[0];
+
 
 
 let coords =
@@ -107,8 +119,11 @@ coords.map(x=>[x[1],x[0]]);
 
 
 
-if(routeLine)
+if(routeLine){
+
 map.removeLayer(routeLine);
+
+}
 
 
 
@@ -125,42 +140,64 @@ map.fitBounds(routeLine.getBounds());
 
 
 let km =
-(data.routes[0].distance/1000).toFixed(1);
+(selectedRoute.distance/1000).toFixed(1);
 
 
 
-let warnings = await checkRoadRestrictions(points);
+let warnings =
+await checkRoadRestrictions(points);
+
+
+
 let score =
 calculateScooterScore(
 warnings,
-data.routes[0].distance
+selectedRoute.distance
 );
 
-if(warnings.length > 0){
 
-document.getElementById("info").innerHTML =
+
+if(warnings.length>0){
+
+
+document.getElementById("info").innerHTML=
 
 "⚠️ ATTENZIONE<br><br>"+
-"Questo percorso contiene strade non adatte ai ciclomotori:<br><br>"+
-warnings.map(w =>
+"Strade non consigliate:<br>"+
+warnings.map(w=>
 "🚫 "+w.name+" ("+w.type+")"
-).join("<br>");
+).join("<br>")
++
+"<br><br>Compatibilità 50cc: "
++score+"/100";
+
 
 }
 
-else {
+else{
 
 
-document.getElementById("info").innerHTML =
+document.getElementById("info").innerHTML=
 
 "🟢 Percorso verificato<br><br>"+
 "📏 "+km+" km<br>"+
-"🛵 Percorribile con ciclomotore"+
-"🛵 Compatibilità 50cc: "+score+"/100";
+"🛵 Compatibilità 50cc: "
++score+"/100";
 
 
 }
 
+
+}
+
+catch(error){
+
+
+document.getElementById("info").innerHTML=
+"❌ Errore: "+error.message;
+
+
+}
 
 
 }
