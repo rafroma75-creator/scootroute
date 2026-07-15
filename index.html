@@ -2,183 +2,72 @@
 <html lang="it">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>ScootRoute</title>
 
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 
 </head>
 
 
 <body>
 
-<div class="app">
-
-<h1>🛵 ScootRoute</h1>
-
-<p class="subtitle">
-Navigatore intelligente per scooter e ciclomotori
-</p>
+<div class="header">
+    🛵 ScootRoute
+</div>
 
 
-<div class="card">
+<div class="panel">
 
-<label>Partenza</label>
-<input id="start" placeholder="Es. Monza">
+<input id="start" placeholder="📍 Partenza">
 
-
-<label>Destinazione</label>
-<input id="end" placeholder="Es. Milano Duomo">
+<input id="end" placeholder="🏁 Destinazione">
 
 
-<button onclick="route()">
-Calcola percorso
+<select id="vehicle">
+
+<option value="50cc">
+🛵 Ciclomotore 50cc
+</option>
+
+<option value="125cc">
+🛵 Scooter 125cc
+</option>
+
+<option value="motorcycle">
+🏍 Moto
+</option>
+
+</select>
+
+
+<button onclick="calculateRoute()">
+CALCOLA PERCORSO
 </button>
 
+
+<div id="info">
+Pronto
 </div>
+
+
+</div>
+
 
 
 <div id="map"></div>
 
 
-<div id="result" class="result">
-Inserisci partenza e destinazione
-</div>
-
-
-</div>
-
-
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+<script src="roads.js"></script>
 
-<script>
-
-
-let map = L.map('map').setView([45.5845,9.2744],13);
-
-  setTimeout(() => {
-    map.invalidateSize();
-}, 300);
-
-L.tileLayer(
-'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-{
-maxZoom:19
-}
-).addTo(map);
-
-
-let line;
-
-
-
-async function geocode(place){
-
-let url =
-"https://nominatim.openstreetmap.org/search?format=json&q="
-+ encodeURIComponent(place);
-
-
-let response = await fetch(url);
-
-let data = await response.json();
-
-
-return [
-parseFloat(data[0].lat),
-parseFloat(data[0].lon)
-];
-
-}
-
-
-
-
-async function route(){
-
-
-let start =
-document.getElementById("start").value;
-
-
-let end =
-document.getElementById("end").value;
-
-
-
-let a = await geocode(start);
-
-let b = await geocode(end);
-
-
-
-let url =
-`https://router.project-osrm.org/route/v1/driving/${a[1]},${a[0]};${b[1]},${b[0]}?overview=full&geometries=geojson`;
-
-
-
-let response =
-await fetch(url);
-
-
-let data =
-await response.json();
-
-
-
-let coords =
-data.routes[0].geometry.coordinates;
-
-
-
-let points =
-coords.map(c=>[c[1],c[0]]);
-
-
-
-if(line){
-map.removeLayer(line);
-}
-
-
-
-line =
-L.polyline(points,{
-weight:5
-}).addTo(map);
-
-
-
-map.fitBounds(line.getBounds());
-
-
-
-let km =
-(data.routes[0].distance/1000).toFixed(1);
-
-
-let min =
-Math.round(data.routes[0].duration/60);
-
-
-
-document.getElementById("result").innerHTML =
-
-"✅ Percorso trovato<br><br>"+
-"📏 Distanza: "+km+" km<br>"+
-"⏱ Tempo stimato: "+min+" minuti<br><br>"+
-"🛵 Modalità: ciclomotore";
-
-
-}
-
-
-
-</script>
+<script src="app.js"></script>
 
 
 </body>
