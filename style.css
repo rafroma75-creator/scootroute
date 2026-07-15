@@ -65,3 +65,8 @@ button {
     padding:20px;
     border-radius:15px;
 }
+#map {
+height:400px;
+margin-top:20px;
+border-radius:15px;
+}
