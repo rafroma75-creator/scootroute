@@ -31,7 +31,7 @@ out tags;
 
 let url=
 
-"https://overpass-api.de/api/interpreter?data="
+"https://overpass.kumi.systems/api/interpreter?data="
 +
 encodeURIComponent(query);
 
@@ -39,6 +39,12 @@ encodeURIComponent(query);
 
 let response =
 await fetch(url);
+
+
+if(!response.ok){
+    console.log("Overpass errore:", response.status);
+    continue;
+}
 
 
 let data =
