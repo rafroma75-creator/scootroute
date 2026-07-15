@@ -33,7 +33,25 @@ data[0].lon
 
 }
 
+function buildRouteURL(a,b,mode){
 
+let profile="driving";
+
+
+if(mode==="50cc"){
+    profile="driving";
+}
+
+
+return `
+https://router.project-osrm.org/route/v1/${profile}/
+${a[1]},${a[0]};
+${b[1]},${b[0]}
+?overview=full&geometries=geojson&alternatives=true
+`
+.replace(/\s/g,'');
+
+}
 
 
 async function calculateRoute(){
@@ -57,9 +75,12 @@ await geocode(end);
 
 
 
-let url =
+let vehicle =
+document.getElementById("vehicle").value;
 
-`https://router.project-osrm.org/route/v1/driving/${a[1]},${a[0]};${b[1]},${b[0]}?overview=full&geometries=geojson`;
+
+let url =
+buildRouteURL(a,b,vehicle);
 
 
 
@@ -72,8 +93,12 @@ await response.json();
 
 
 
+let selectedRoute =
+data.routes[0];
+
+
 let coords =
-data.routes[0].geometry.coordinates;
+selectedRoute.geometry.coordinates;
 
 
 
