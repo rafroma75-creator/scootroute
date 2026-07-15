@@ -1,1 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScootRoute</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>ScootRoute</h1>
+            <p>Il navigatore intelligente per ciclomotori</p>
+        </header>
+
+
+        <main>
+
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    placeholder="Dove vuoi andare?"
+                    id="destination">
+            </div>
+
+
+            <div class="vehicle-selector">
+
+                <button class="active">
+                    🛵<br>
+                    50cc
+                </button>
+
+                <button>
+                    🚲<br>
+                    eBike
+                </button>
+
+                <button>
+                    🛴<br>
+                    Scooter
+                </button>
+
+            </div>
+
+
+            <button class="start-button">
+                Avvia percorso
+            </button>
+
+
+            <div class="info-card">
+
+                <div>
+                    <span>Velocità</span>
+                    <strong>-- km/h</strong>
+                </div>
+
+                <div>
+                    <span>Distanza</span>
+                    <strong>-- km</strong>
+                </div>
+
+                <div>
+                    <span>Tempo</span>
+                    <strong>-- min</strong>
+                </div>
+
+            </div>
+
+
+        </main>
+
+
+        <footer>
+            <p>© 2026 ScootRoute</p>
+        </footer>
+
+    </div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
