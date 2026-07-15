@@ -130,7 +130,11 @@ let km =
 
 
 let warnings = await checkRoadRestrictions(points);
-
+let score =
+calculateScooterScore(
+warnings,
+data.routes[0].distance
+);
 
 if(warnings.length > 0){
 
@@ -151,7 +155,8 @@ document.getElementById("info").innerHTML =
 
 "🟢 Percorso verificato<br><br>"+
 "📏 "+km+" km<br>"+
-"🛵 Percorribile con ciclomotore";
+"🛵 Percorribile con ciclomotore"
+"🛵 Compatibilità 50cc: "+score+"/100";
 
 
 }
