@@ -62,3 +62,20 @@ async function checkRoadRestrictions(points) {
     return warnings;
 
 }
+function calculateScooterScore(warnings, distance){
+
+
+let score=100;
+
+
+score -= warnings.length * 20;
+
+
+if(distance>30000){
+score-=10;
+}
+
+
+return Math.max(score,0);
+
+}
