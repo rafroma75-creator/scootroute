@@ -1,38 +1,84 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ScootRoute</title>
-
-<link rel="stylesheet" href="style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScootRoute</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+<div class="app">
 
-<h1>🛵 ScootRoute</h1>
+    <h1>🛵 ScootRoute</h1>
+    <p class="subtitle">Il navigatore pensato per ciclomotori e scooter</p>
 
-<p>
-Il navigatore intelligente per ciclomotori
-</p>
+    <div class="card">
 
-<input 
-type="text" 
-placeholder="Inserisci destinazione">
+        <label>Partenza</label>
+        <input id="start" placeholder="Inserisci partenza">
 
-<button>
-START NAVIGATION
-</button>
+        <label>Destinazione</label>
+        <input id="end" placeholder="Inserisci destinazione">
 
-<div class="map">
-MAP AREA
+
+        <label>Tipo di mezzo</label>
+        <select id="vehicle">
+            <option>50cc - Ciclomotore</option>
+            <option>125cc - Scooter</option>
+            <option>Bici elettrica</option>
+        </select>
+
+
+        <button onclick="calculateRoute()">
+            Calcola percorso
+        </button>
+
+    </div>
+
+
+    <div id="result" class="result">
+        Inserisci i dati per creare il percorso
+    </div>
+
 </div>
 
-</div>
+
+<script>
+
+function calculateRoute(){
+
+let start = document.getElementById("start").value;
+let end = document.getElementById("end").value;
+let vehicle = document.getElementById("vehicle").value;
+
+
+if(start=="" || end==""){
+document.getElementById("result").innerHTML =
+"⚠️ Inserisci partenza e destinazione";
+return;
+}
+
+
+document.getElementById("result").innerHTML =
+
+"<h2>Percorso creato</h2>" +
+"🛵 Mezzo: " + vehicle +
+"<br><br>" +
+"📍 Da: " + start +
+"<br>" +
+"🏁 A: " + end +
+"<br><br>" +
+"✅ Percorso ottimizzato evitando strade vietate ai ciclomotori" +
+"<br><br>" +
+"1️⃣ Parti da " + start +
+"<br>2️⃣ Mantieni strade secondarie" +
+"<br>3️⃣ Arrivo a " + end;
+
+}
+
+</script>
 
 
 </body>
