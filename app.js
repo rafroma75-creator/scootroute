@@ -155,7 +155,7 @@ document.getElementById("info").innerHTML =
 
 "🟢 Percorso verificato<br><br>"+
 "📏 "+km+" km<br>"+
-"🛵 Percorribile con ciclomotore"
+"🛵 Percorribile con ciclomotore"+
 "🛵 Compatibilità 50cc: "+score+"/100";
 
 
