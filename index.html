@@ -60,6 +60,9 @@ Inserisci partenza e destinazione
 
 let map = L.map('map').setView([45.5845,9.2744],13);
 
+  setTimeout(() => {
+    map.invalidateSize();
+}, 300);
 
 L.tileLayer(
 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
